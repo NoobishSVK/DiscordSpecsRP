@@ -1,0 +1,23 @@
+{
+  "name": "rpc-specs",
+  "version": "1.0.0",
+  "description": "RPC Specs allows everyone to see your PC specs dynamically in Discord Rich Presence!",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rich",
+    "presence",
+    "specs",
+    "discord",
+    "rpc",
+    "specifications"
+  ],
+  "author": "Noobish <noobish@noobish.eu>",
+  "license": "MIT",
+  "dependencies": {
+    "nexe": "^4.0.0-rc.2",
+    "trayicon": "^1.2.2"
+  }
+}
