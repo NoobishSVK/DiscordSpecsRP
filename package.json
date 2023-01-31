@@ -18,6 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "nexe": "^4.0.0-rc.2",
+    "systeminformation": "^5.17.8",
     "trayicon": "^1.2.2"
   }
 }
