@@ -10,6 +10,7 @@ A standalone plugin taken from the app [Specinator](https://specinator.net), **D
 2. Open the packed binary file. 💻
 
 ## 🔧 For Developers
+If you'd like to run this repo and make changes yourself locally, you can do it this way: 
 1. Install [npm](https://nodejs.org/en/download/). 
 2. Clone this repo.
 3. Open a command line in the folder with this repo.
