@@ -6,13 +6,16 @@
  */
 const si = require('systeminformation');
 const client = require('discord-rich-presence')('1070435652040134706');
-const Tray = require('trayicon'); // 
+const Tray = require('trayicon');
+
+var fs = require('fs');
 
 /**
  * App data
  */
 const replaceValues = require('./values.js');
-const appVersion = "1.0.0";
+const appVersion = "1.0.2";
+var iconData = fs.readFileSync('./assets/img/icon.ico');
 
 /**
  * Tray functions
@@ -20,14 +23,14 @@ const appVersion = "1.0.0";
 
 Tray.create(function(tray) {
     tray.setTitle("DiscordSpecsRP " + appVersion);
+    tray.setIcon(iconData);
+    let main = tray.item("DiscordSpecsRP " + appVersion);
+    let specinator = tray.item("Download Specinator");
 
-    let main = tray.item("Visible specs");
-    main.add(tray.item("CPU"), tray.item("GPU"), tray.item("RAM"), tray.item("OS"));
-
-    tray.separator();
+    let separator = tray.separator();
 
     let quit = tray.item("Quit", () => tray.kill());
-    tray.setMenu(main, quit);
+    tray.setMenu(main, specinator, separator, quit);
 });
 
 /**
