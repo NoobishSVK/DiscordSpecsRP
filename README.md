@@ -1,6 +1,8 @@
 # 💻 DiscordSpecsRP 
 A standalone plugin taken from the app [Specinator](https://specinator.net), **DiscordSpecsRP** allows you to share your specs with everyone on Discord. 
 
+![](https://i.imgur.com/0SXSuXV.png)
+
 ## 📊 Features
 - Show your specs in the Rich Presence tab on Discord 💬
 - Easy to use and install 💿
