@@ -1,37 +1,62 @@
 /**
- * Plugins
+ * External Plugins
  * @param si      https://github.com/sebhildebrandt/systeminformation
  * @param Tray    https://github.com/131/trayicon
  * @param client  https://github.com/devsnek/discord-rich-presence
  */
 const si = require('systeminformation');
 const client = require('discord-rich-presence')('1070435652040134706');
-const Tray = require('trayicon');
+//const Tray = require('trayicon');
 
+/* Internal node.js plugins */
 var fs = require('fs');
+const os = require('os');
+
+/* App variables & definitions */
+const replaceValues = require('./values.js');
+const appVersion = "1.0";
+var iconData = fs.readFileSync('./assets/img/icon.ico');
+var running = true;
+
 
 /**
- * App data
+ * pkg optimizations, this will allow the app to run once installed by pkg
+ * also a fail catcher
  */
-const replaceValues = require('./values.js');
-const appVersion = "1.0.2";
-var iconData = fs.readFileSync('./assets/img/icon.ico');
+function killProcess() {
+    running = false;
+}
+
+process.on('SIGTERM', killProcess);
+process.on('SIGINT', killProcess);
+process.on('uncaughtException', function(e) {
+    console.log('[uncaughtException] app will be terminated: ', e.stack);
+    killProcess();
+});
+
+function run() {
+    setTimeout(function() {
+        if (running) run();
+    }, 10);
+}
+
+run();
 
 /**
  * Tray functions
  */
 
-Tray.create(function(tray) {
+/*Tray.create(function(tray) {
     tray.setTitle("DiscordSpecsRP " + appVersion);
     tray.setIcon(iconData);
-    let main = tray.item("DiscordSpecsRP " + appVersion);
+    let main = tray.item("Check for updates");
     let specinator = tray.item("Download Specinator");
 
     let separator = tray.separator();
 
     let quit = tray.item("Quit", () => tray.kill());
     tray.setMenu(main, specinator, separator, quit);
-});
+});*/
 
 /**
  * Data gatherers
@@ -56,14 +81,7 @@ const gpuPromise = new Promise((resolve, reject) => {
 });
 
 const ramPromise = new Promise((resolve, reject) => {
-  si.memLayout(function(data) {
-    let ramspace = 0.0;
-    for (const bankSlot of data) {
-      ramspace += bankSlot.size
-      var bankSize = bankSlot.size / Math.pow(1024, 3);
-    }
-    resolve(Math.ceil(bankSize));
-  });
+    resolve(Math.ceil(os.totalmem() / Math.pow(1024, 3)));
 });
 
 const osPromise = new Promise((resolve, reject) => {
@@ -82,7 +100,14 @@ const osPromise = new Promise((resolve, reject) => {
 Promise.all([cpuPromise, gpuPromise, ramPromise, osPromise])
   .then(values => {
     const [specCpu, specGpu, specRam, specOs] = values;
-    console.log(specCpu, specGpu, specRam + "GB RAM", osPromise);
+
+    /* console logs with specs for debug purposes */
+    console.log("Detected specs:")
+    console.log("\x1b[35m[CPU] \x1b[37m" + specCpu);
+    console.log("\x1b[35m[GPU] \x1b[37m" + specGpu);
+    console.log("\x1b[35m[RAM] \x1b[37m" + specRam + "GB RAM");
+    console.log("\x1b[35m[OS] \x1b[37m" + specOs);
+    console.log("\x1b[32mDiscord Rich Presence is now showing your specs.")
     client.updatePresence({
       state: specGpu + " • " + specRam + "GB RAM",
       details: specCpu,

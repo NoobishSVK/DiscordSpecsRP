@@ -1,11 +1,18 @@
 {
-  "name": "rpc-specs",
+  "name": "discordspecsrp",
+  "bin": "main.js",
   "version": "1.0.0",
   "description": "RPC Specs allows everyone to see your PC specs dynamically in Discord Rich Presence!",
-  "main": "main.js",
+  "main": "./main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "pkg": {
+    "assets": [
+        "**/*", "assets/img/**/*", "node_modules/**/*"
+    ],
+    "output": "dist"
+},
   "keywords": [
     "rich",
     "presence",
