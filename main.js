@@ -1,9 +1,12 @@
 /**
  * Plugins
+ * @param si      https://github.com/sebhildebrandt/systeminformation
+ * @param Tray    https://github.com/131/trayicon
+ * @param client  https://github.com/devsnek/discord-rich-presence
  */
-const si = require('systeminformation'); // https://github.com/sebhildebrandt/systeminformation
+const si = require('systeminformation');
 const client = require('discord-rich-presence')('1070435652040134706');
-const Tray = require('trayicon'); // https://github.com/131/trayicon
+const Tray = require('trayicon'); // 
 
 /**
  * App data
@@ -11,23 +14,35 @@ const Tray = require('trayicon'); // https://github.com/131/trayicon
 const replaceValues = require('./values.js');
 const appVersion = "1.0.0";
 
-let specCpu = "";
-//let specGpu = "";
-//let specRam = "";
+/**
+ * Tray functions
+ */
 
 Tray.create(function(tray) {
-    tray.setTitle("DiscordSpecsRP");
-    let main = tray.item("Power");
-    main.add(tray.item("on"), tray.item("on"));
+    tray.setTitle("DiscordSpecsRP " + appVersion);
+
+    let main = tray.item("Visible specs");
+    main.add(tray.item("CPU"), tray.item("GPU"), tray.item("RAM"), tray.item("OS"));
+
+    tray.separator();
+
     let quit = tray.item("Quit", () => tray.kill());
     tray.setMenu(main, quit);
 });
+
+/**
+ * Data gatherers
+ * @param cpuPromise
+ * @param gpuPromise
+ * @param ramPromise
+ * @param osPromise
+ */
 
 const cpuPromise = new Promise((resolve, reject) => {
   si.cpu(function(data) {
     cpuModel = Object.entries(replaceValues).reduce((acc, [key, value]) => acc.replace(key, value), data.brand);
     cpuFrequency = Object.entries(replaceValues).reduce((acc, [key, value]) => acc.replace(key, value), data.speedMax.toFixed(1));
-    resolve(cpuModel + " @ " + cpuFrequency + " GHz");
+    resolve(data.manufacturer + " " +cpuModel + " @ " + cpuFrequency + " GHz");
   });
 });
 
@@ -56,6 +71,11 @@ const osPromise = new Promise((resolve, reject) => {
   });
 });
 
+/**
+ * Data handling
+ * Discord updates
+ */
+
 Promise.all([cpuPromise, gpuPromise, ramPromise, osPromise])
   .then(values => {
     const [specCpu, specGpu, specRam, specOs] = values;
@@ -64,10 +84,11 @@ Promise.all([cpuPromise, gpuPromise, ramPromise, osPromise])
       state: specGpu + " • " + specRam + "GB RAM",
       details: specCpu,
       largeImageText: specOs,
+      smallImageText: "DiscordSpecsRP " + appVersion,
       largeImageKey: 'logo',
       smallImageKey: 'checkmark',
       instance: true,
-      buttons: [{label : 'Show your specs now!' , url : 'https://specinator.net'}]
+      buttons: [{label : 'Share your specs now!' , url: 'https://github.com/NoobishSVK/DiscordSpecsRP'}]
     });
   })
   .catch(error => {
