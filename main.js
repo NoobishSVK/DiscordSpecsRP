@@ -1,69 +1,37 @@
 /**
  * External Plugins
- * @param si      https://github.com/sebhildebrandt/systeminformation
- * @param Tray    https://github.com/131/trayicon
- * @param client  https://github.com/devsnek/discord-rich-presence
+ * @param si                https://github.com/sebhildebrandt/systeminformation
+ * @param client            https://github.com/devsnek/discord-rich-presence
  */
 const si = require('systeminformation');
 const client = require('discord-rich-presence')('1070435652040134706');
-//const Tray = require('trayicon');
 
-/* Internal node.js plugins */
-var fs = require('fs');
+/**
+ * Internal node.js plugins
+ * @param os                Operating System Info 
+ */
 const os = require('os');
 
-/* App variables & definitions */
+/**
+ * App variables & definitions 
+ * @param replaceValues     Values for string simplification
+ * @param appVersion        Current version of the app
+ */
 const replaceValues = require('./values.js');
-const appVersion = "1.0";
-var iconData = fs.readFileSync('./assets/img/icon.ico');
-var running = true;
+const appVersion = "1.1.4";
 
 
-/**
- * pkg optimizations, this will allow the app to run once installed by pkg
- * also a fail catcher
- */
-function killProcess() {
-    running = false;
-}
+////////////////////////////////////////////////
+//          APP FUNCTIONS START HERE          //
+////////////////////////////////////////////////
 
-process.on('SIGTERM', killProcess);
-process.on('SIGINT', killProcess);
-process.on('uncaughtException', function(e) {
-    console.log('[uncaughtException] app will be terminated: ', e.stack);
-    killProcess();
-});
-
-function run() {
-    setTimeout(function() {
-        if (running) run();
-    }, 10);
-}
-
-run();
-
-/**
- * Tray functions
- */
-
-/*Tray.create(function(tray) {
-    tray.setTitle("DiscordSpecsRP " + appVersion);
-    tray.setIcon(iconData);
-    let main = tray.item("Check for updates");
-    let specinator = tray.item("Download Specinator");
-
-    let separator = tray.separator();
-
-    let quit = tray.item("Quit", () => tray.kill());
-    tray.setMenu(main, specinator, separator, quit);
-});*/
 
 /**
  * Data gatherers
- * @param cpuPromise
- * @param gpuPromise
- * @param ramPromise
- * @param osPromise
+ * @param cpuPromise        CPU data gatherer & resolver    (via @param si)
+ * @param gpuPromise        GPU Data gatherer & resolver    (via @param si)
+ * @param ramPromise        RAM Data gatherer & resolver    (via @param si)
+ * @param osPromise         OS Data gatherer & resolver     (via @param os)
  */
 
 const cpuPromise = new Promise((resolve, reject) => {
@@ -93,21 +61,16 @@ const osPromise = new Promise((resolve, reject) => {
 });
 
 /**
- * Data handling
- * Discord updates
+ * Data handling - happens after all the data is gathered and ready to parse via @function Promise.all
+ * @param specCpu, @param specGpu, @param specRam, @param specOs parsed data values ready for display
  */
 
 Promise.all([cpuPromise, gpuPromise, ramPromise, osPromise])
   .then(values => {
     const [specCpu, specGpu, specRam, specOs] = values;
 
-    /* console logs with specs for debug purposes */
-    console.log("Detected specs:")
-    console.log("\x1b[35m[CPU] \x1b[37m" + specCpu);
-    console.log("\x1b[35m[GPU] \x1b[37m" + specGpu);
-    console.log("\x1b[35m[RAM] \x1b[37m" + specRam + "GB RAM");
-    console.log("\x1b[35m[OS] \x1b[37m" + specOs);
-    console.log("\x1b[32mDiscord Rich Presence is now showing your specs.")
+    drawConsoleData(specCpu, specGpu, specRam, specOs);
+
     client.updatePresence({
       state: specGpu + " • " + specRam + "GB RAM",
       details: specCpu,
@@ -120,5 +83,23 @@ Promise.all([cpuPromise, gpuPromise, ramPromise, osPromise])
     });
   })
   .catch(error => {
-    console.error(error);
+    console.error("\x1b[31m[ERROR] " + error);
   });
+
+/**
+ * Draw console data
+ */
+
+  function drawConsoleData(specCpu, specGpu, specRam, specOs) {
+    console.log("*******************************");
+    console.log("**      DiscordSpecsRP       **");
+    console.log("*******************************");
+    console.log("");
+    console.log("Detected specs:")
+    console.log("\x1b[35m[CPU] \x1b[37m" + specCpu);
+    console.log("\x1b[35m[GPU] \x1b[37m" + specGpu);
+    console.log("\x1b[35m[RAM] \x1b[37m" + specRam + "GB RAM");
+    console.log("\x1b[35m[OS]  \x1b[37m" + specOs);
+    console.log("")
+    console.log("\x1b[32mDiscord Rich Presence is now showing your specs.");
+  }

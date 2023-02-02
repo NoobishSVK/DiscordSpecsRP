@@ -14,7 +14,7 @@ const replaceValues = {
     'with radeon Vega Mobile Gfx': '',
     'Gen Intel®': '',
     // GPU
-    'NVIDIA': '',
+    'NVIDIA ': '',
     '3GB':'',
     '6GB': '',
     ' SUPER':'S',
