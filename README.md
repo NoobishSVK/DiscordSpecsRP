@@ -23,5 +23,5 @@ If you'd like to run this repo and make changes yourself locally, you can do it 
 If you'd like to support the development of DiscordSpecsRP, consider donating at [ko-fi.com/specinator](https://ko-fi.com/specinator). 💜
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/P5P1BTSLT)
 
-## 🤝 Contributing
-If you're interested in contributing to DiscordSpecsRP, feel free to do so, any improvements are welcome! 🤗
+## 🤝 Code contribution
+If you're interested in contributing with new code / improvements to DiscordSpecsRP, feel free to do so! 🤗
