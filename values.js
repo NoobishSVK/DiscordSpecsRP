@@ -24,33 +24,6 @@ const replaceValues = {
     'Graphics': '',
     '& Display': '',
     'AMD': '',
-    // Motherboards
-    'Apple': '',
-    'Micro-Star': 'MSi',
-    'ASUSTeK': 'ASUS',
-    'COMPUTER INC.': '',
-    'Gigabyte Technology Co., Ltd.': 'Gigabyte',
-    'MSi International Co., Ltd': 'MSi',
-    // Drives
-    'Samsung': '',
-    'SAMSUNG': '',
-    'KINGSTON': '',
-    'WDC': '',
-    'ATA Device': '',
-    'USB Device': '',
-    'SanDisk': '',
-    'SANDISK': '',
-    'APPLE':  '',
-    // Network adapters
-    'Gigabit': '',
-    'Ethernet':'',
-    'Controller':'',
-    'Connection': '',
-    'PCIe': '',
-    'Family': '',
-    'Network': '',
-    'Wireless': '',
-    'Version': ''
   };
 
   module.exports = replaceValues;

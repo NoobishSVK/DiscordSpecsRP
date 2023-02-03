@@ -36,15 +36,20 @@ const appVersion = "1.1.4";
 
 const cpuPromise = new Promise((resolve, reject) => {
   si.cpu(function(data) {
-    cpuModel = Object.entries(replaceValues).reduce((acc, [key, value]) => acc.replace(key, value), data.brand);
-    cpuFrequency = Object.entries(replaceValues).reduce((acc, [key, value]) => acc.replace(key, value), data.speedMax.toFixed(1));
+    cpuModel = Object.entries(replaceValues)
+    .reduce((acc, [key, value]) => acc.replace(key, value), data.brand);
+
+    cpuFrequency = Object.entries(replaceValues)
+    .reduce((acc, [key, value]) => acc.replace(key, value), data.speedMax.toFixed(1));
+
     resolve(data.manufacturer + " " +cpuModel + " @ " + cpuFrequency + " GHz");
   });
 });
 
 const gpuPromise = new Promise((resolve, reject) => {
   si.graphics(function(data) {
-    resolve(Object.entries(replaceValues).reduce((acc, [key, value]) => acc.replace(key, value), data.controllers[0].model));
+    resolve(Object.entries(replaceValues)
+    .reduce((acc, [key, value]) => acc.replace(key, value), data.controllers[0].model));
   });
 });
 
@@ -54,7 +59,8 @@ const ramPromise = new Promise((resolve, reject) => {
 
 const osPromise = new Promise((resolve, reject) => {
   si.osInfo(function(data) {
-    resolve(data.distro + data.arch.replace('x86', '[32-bit]')
+    resolve(data.distro + data.arch
+    .replace('x86', '[32-bit]')
     .replace('x64', ' [64-bit]')
     .replace('arm64', ' [ARM 64-bit]'));
   });
