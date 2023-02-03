@@ -28,9 +28,6 @@
   "license": "MIT",
   "dependencies": {
     "discord-rich-presence": "^0.0.8",
-    "nexe": "^4.0.0-rc.2",
-    "node-hide-console-window": "^2.1.1",
-    "systeminformation": "^5.17.8",
-    "trayicon": "^1.2.2"
+    "systeminformation": "^5.17.8"
   }
 }
