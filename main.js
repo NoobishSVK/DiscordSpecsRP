@@ -18,7 +18,7 @@ const os = require('os');
  * @param appVersion        Current version of the app
  */
 const replaceValues = require('./values.js');
-const appVersion = "1.1.4";
+const appVersion = "1.2.0";
 
 
 ////////////////////////////////////////////////
@@ -38,11 +38,7 @@ const cpuPromise = new Promise((resolve, reject) => {
   si.cpu(function(data) {
     cpuModel = Object.entries(replaceValues)
     .reduce((acc, [key, value]) => acc.replace(key, value), data.brand);
-
-    cpuFrequency = Object.entries(replaceValues)
-    .reduce((acc, [key, value]) => acc.replace(key, value), data.speedMax.toFixed(1));
-
-    resolve(data.manufacturer + " " +cpuModel + " @ " + cpuFrequency + " GHz");
+    resolve(data.manufacturer + " " +cpuModel + " @ " + data.speedMax.toFixed(1) + " GHz");
   });
 });
 
@@ -59,16 +55,19 @@ const ramPromise = new Promise((resolve, reject) => {
 
 const osPromise = new Promise((resolve, reject) => {
   si.osInfo(function(data) {
-    resolve(data.distro + data.arch
-    .replace('x86', '[32-bit]')
-    .replace('x64', ' [64-bit]')
-    .replace('arm64', ' [ARM 64-bit]'));
+    resolve(
+      data.distro.replace('Microsoft ', '') +
+      data.arch
+        .replace('x86', '[32-bit]')
+        .replace('x64', ' [64-bit]')
+        .replace('arm64', ' [ARM 64-bit]'));
   });
 });
 
 /**
  * Data handling - happens after all the data is gathered and ready to parse via @function Promise.all
  * @param specCpu, @param specGpu, @param specRam, @param specOs parsed data values ready for display
+ * @param osLogo gathers the OS Logo and uses it as the small circle on the bottom right side
  */
 
 Promise.all([cpuPromise, gpuPromise, ramPromise, osPromise])
@@ -76,16 +75,28 @@ Promise.all([cpuPromise, gpuPromise, ramPromise, osPromise])
     const [specCpu, specGpu, specRam, specOs] = values;
 
     drawConsoleData(specCpu, specGpu, specRam, specOs);
+    let osLogo = 'checkmark';
+
+
+    if(specOs.includes("Windows")) {
+      osLogo = 'windows';
+    }
+    if(specOs.includes("Linux")) {
+      osLogo = 'linux';
+    }
+    if(specOs.includes("macOS")) {
+      osLogo = 'macos';
+    }
 
     client.updatePresence({
       state: specGpu + " • " + specRam + "GB RAM",
       details: specCpu,
-      largeImageText: specOs,
-      smallImageText: "DiscordSpecsRP " + appVersion,
+      largeImageText: "DiscordSpecsRP " + appVersion,
+      smallImageText: specOs,
       largeImageKey: 'logo',
-      smallImageKey: 'checkmark',
+      smallImageKey: osLogo,
       instance: true,
-      buttons: [{label : 'Share your specs now!' , url: 'https://github.com/NoobishSVK/DiscordSpecsRP'}]
+      buttons: [{label: 'Share your specs now!' , url: 'https://github.com/NoobishSVK/DiscordSpecsRP'}]
     });
   })
   .catch(error => {

@@ -23,7 +23,7 @@ const replaceValues = {
     'Series': '',
     'Graphics': '',
     '& Display': '',
-    'AMD': '',
+    'AMD': ''
   };
 
   module.exports = replaceValues;
