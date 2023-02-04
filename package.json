@@ -14,7 +14,7 @@
       "assets/img/**/*",
       "node_modules/**/*"
     ],
-    "output": "dist"
+    "outputpath": "dist"
   },
   "keywords": [
     "rich",

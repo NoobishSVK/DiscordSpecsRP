@@ -38,7 +38,7 @@ const cpuPromise = new Promise((resolve, reject) => {
   si.cpu(function(data) {
     cpuModel = Object.entries(replaceValues)
     .reduce((acc, [key, value]) => acc.replace(key, value), data.brand);
-    resolve(data.manufacturer + " " +cpuModel + " @ " + data.speedMax.toFixed(1) + " GHz");
+    resolve(data.manufacturer + " " + cpuModel + " @ " + data.speedMax.toFixed(1) + " GHz");
   });
 });
 
