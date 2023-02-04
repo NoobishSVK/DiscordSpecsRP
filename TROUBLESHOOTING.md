@@ -3,13 +3,13 @@ Having issues? Here you can find the most common issues and a way to get rid of 
 
 ## Errors inside the app
 
-**Q: I can't see my specs on Discord**
+**Q: I can't see my specs on Discord**  
 A: Check your **Activity Privacy** in your Discord app.
 
-**Q: I am getting a timeout error**
+**Q: I am getting a timeout error**  
 A: Try to restart both Discord and DiscordSpecsRP.
 
-**Q: My specs are incorrect, what do I do?**
+**Q: My specs are incorrect, what do I do?**  
 A: You can either edit the values.js file or contact us with your HW specs and we will try to do our best to fix it in the next release.
 
 ## Other errors
