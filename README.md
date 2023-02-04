@@ -11,6 +11,10 @@ A standalone plugin taken from the app [Specinator](https://specinator.net), **D
 1. Download the packed file from the [releases](https://github.com/NoobishSVK/DiscordSpecsRP/releases) page. 📥
 2. Open the packed binary file. 💻
 
+## 😟 Troubleshooting
+Please see [TROUBLESHOOTING.md](https://github.com/NoobishSVK/DiscordSpecsRP/blob/main/TROUBLESHOOTING.md) for all the issues you might encounter.
+Only open an issue if the issue is **NOT** listed above.  
+
 ## 🔧 For Developers
 If you'd like to run this repo and make changes yourself locally, you can do it this way: 
 1. Install [npm](https://nodejs.org/en/download/). 
