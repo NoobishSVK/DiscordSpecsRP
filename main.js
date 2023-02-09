@@ -5,6 +5,8 @@
  */
 const si = require('systeminformation');
 const client = require('discord-rich-presence')('1070435652040134706');
+const SysTray = require('systray').default;
+const open = require('open');
 
 /**
  * Internal node.js plugins
@@ -15,9 +17,13 @@ const os = require('os');
 /**
  * App variables & definitions 
  * @param replaceValues     Values for string simplification
+ * @param appIcon           App icon in BASE64
+ * @param appName           The name of DiscordSpecsRP
  * @param appVersion        Current version of the app
  */
 const replaceValues = require('./values.js');
+const appIcon = require('./icon.js');
+const appName = "DiscordSpecsRP";
 const appVersion = "1.2.0";
 
 
@@ -91,7 +97,7 @@ Promise.all([cpuPromise, gpuPromise, ramPromise, osPromise])
     client.updatePresence({
       state: specGpu + " • " + specRam + "GB RAM",
       details: specCpu,
-      largeImageText: "DiscordSpecsRP " + appVersion,
+      largeImageText: appName + " " + appVersion,
       smallImageText: specOs,
       largeImageKey: 'logo',
       smallImageKey: osLogo,
@@ -120,3 +126,50 @@ Promise.all([cpuPromise, gpuPromise, ramPromise, osPromise])
     console.log("")
     console.log("\x1b[32mDiscord Rich Presence is now showing your specs.");
   }
+
+  const systray = new SysTray({
+    menu: {
+        // you should using .png icon in macOS/Linux, but .ico format in windows
+        icon: appIcon,
+        title: appName + " " + appVersion,
+        tooltip: appName + " " + appVersion,
+        items: [{
+            title: appName + " " + appVersion,
+            tooltip: "",
+            // checked is implement by plain text in linux
+            checked: false,
+            enabled: false
+        }, {
+            title: "Check for updates",
+            tooltip: "bb",
+            checked: false,
+            enabled: true
+        }, {
+            title: "Exit",
+            tooltip: "bb",
+            checked: false,
+            enabled: true
+        }]
+    },
+    debug: false,
+    copyDir: true, // copy go tray binary to outside directory, useful for packing tool like pkg.
+})
+
+  systray.onClick(action => {
+    if (action.seq_id === 0) {
+        systray.sendAction({
+            type: 'update-item',
+            item: {
+            ...action.item,
+            checked: !action.item.checked
+            },
+            seq_id: action.seq_id,
+        })
+    } else if (action.seq_id === 1) {
+        // open the url
+        open('https://github.com/noobishsvk/discordspecsrp/releases');
+        //console.log('open the url', action)
+    } else if (action.seq_id === 2) {
+        systray.kill()
+    }
+})
